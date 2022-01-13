@@ -22,7 +22,20 @@ function addUser(req, res) {
   }
 }
 
-function deposit(req, res) {}
+function deposit(req, res) {
+  let accounts = loadAccounts();
+  const { id, amount } = req.query;
+  const user = accounts.find((account) => account.id === id);
+  if (!user) {
+    res.send(`No user in bank has id ${id}. Please try again.`);
+  } else if (+amount <= 0) {
+    res.send("Deposit amount has to be a positive number");
+  } else {
+    user.cash = +user.cash + +amount;
+    res.send(user);
+    saveAccounts(accounts);
+  }
+}
 function withdraw(req, res) {}
 function transfer(req, res) {}
 
@@ -36,6 +49,7 @@ function getUser(req, res) {
     res.send(user);
   }
 }
+
 function getAllUsers(req, res) {
   res.send(loadAccounts());
 }
