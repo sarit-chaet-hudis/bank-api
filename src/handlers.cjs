@@ -28,6 +28,8 @@ function deposit(req, res) {
   const user = accounts.find((account) => account.id === id);
   if (!user) {
     res.send(`No user in bank has id ${id}. Please try again.`);
+  } else if (isNaN(amount)) {
+    res.send("Deposit amount has to be a number");
   } else if (+amount <= 0) {
     res.send("Deposit amount has to be a positive number");
   } else {
@@ -36,7 +38,26 @@ function deposit(req, res) {
     saveAccounts(accounts);
   }
 }
-function withdraw(req, res) {}
+function withdraw(req, res) {
+  let accounts = loadAccounts();
+  const { id, amount } = req.query;
+  const user = accounts.find((account) => account.id === id);
+  if (!user) {
+    res.send(`No user in bank has id ${id}. Please try again.`);
+  } else if (isNaN(amount)) {
+    res.send("Withdrawal amount has to be a number");
+  } else if (+amount <= 0) {
+    res.send("Withdrawal amount has to be a positive number");
+  } else if (user.cash + user.credit - amount < 0) {
+    res.send(
+      "User cannot withraw this amount, try a smaller one or update credit"
+    );
+  } else {
+    user.cash = +user.cash - +amount;
+    res.send(user);
+    saveAccounts(accounts);
+  }
+}
 function transfer(req, res) {}
 
 function getUser(req, res) {
