@@ -8,10 +8,13 @@ const {
   getAllUsers,
 } = require("./handlers.cjs");
 
-const port = 3000;
+const cors = require("cors");
+
+const port = process.env.PORT || 3000;
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -19,6 +22,7 @@ app.post("/add", addUser);
 // query params: id (mandatory), cash, credit
 
 app.get("/", getAllUsers);
+// no query params
 
 app.get("/:id", getUser);
 // url params: id
@@ -31,5 +35,8 @@ app.put("/withdraw", withdraw);
 
 app.put("/transfer", transfer);
 // query params: id_from, id_to, amount (mandatory)
+
+app.put("/deposit", deposit);
+// query params: id, amount (mandatory)
 
 app.listen(port, () => console.log(`Server is up and runing on ${port}`));
