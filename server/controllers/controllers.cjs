@@ -82,7 +82,7 @@ function getAllUsers(req, res) {
 
 const loadAccounts = () => {
   try {
-    const data = fs.readFileSync("./src/accounts.json").toString();
+    const data = fs.readFileSync("./../accounts.json").toString();
     return JSON.parse(data);
   } catch (error) {
     return [];
