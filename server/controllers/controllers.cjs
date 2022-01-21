@@ -1,4 +1,5 @@
-const fs = require("fs");
+const { get } = require("http");
+const User = require("../models/User");
 
 function addUser(req, res) {
   // add new user, data: passport id, cash(default 0), credit(default 0).
@@ -76,18 +77,23 @@ function getUser(req, res) {
   }
 }
 
-function getAllUsers(req, res) {
-  res.send(loadAccounts());
+async function getAllUsers(req, res) {
+  try {
+    const allUsers = await User.find({});
+    res.status(200).send(allUsers);
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
 }
 
-const loadAccounts = () => {
-  try {
-    const data = fs.readFileSync("./../accounts.json").toString();
-    return JSON.parse(data);
-  } catch (error) {
-    return [];
-  }
-};
+// const loadAccounts = () => {
+//   try {
+//     const data = fs.readFileSync("./../accounts.json").toString();
+//     return JSON.parse(data);
+//   } catch (error) {
+//     return [];
+//   }
+// };
 
 const saveAccounts = (accounts) => {
   const data = JSON.stringify(accounts);

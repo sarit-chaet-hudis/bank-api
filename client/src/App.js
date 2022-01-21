@@ -2,7 +2,7 @@ import bankApi from "./api/Api";
 
 function App() {
   const getAll = async () => {
-    const { data } = await bankApi.get("getall");
+    const { data } = await bankApi.get("/allusers");
     console.log(data);
   };
 

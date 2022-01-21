@@ -1,6 +1,9 @@
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
+const mongoose = require("mongoose");
+require("dotenv").config();
+const URI = process.env.MONGO_URI;
 
 const app = express();
 
@@ -15,34 +18,33 @@ const {
   getAllUsers,
 } = require("./controllers/controllers.cjs");
 
-app.use(express.static(path.join(__dirname, "../client/build")));
+// app.use(express.static(path.join(__dirname, "../client/build")));
+app.use(express.static(path.join(__dirname, "../client/public")));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+mongoose.connect(URI, () => console.log("connected mongoose"));
 
-app.post("/add", addUser);
+app.post("/api/add", addUser);
 // query params: id (mandatory), cash, credit
 
-app.get("api/getall", getAllUsers);
+app.get("/api/allusers", getAllUsers);
 // no query params
 
-app.get("/get/:id", getUser);
+app.get("/api/get/:id", getUser);
 // url params: id
 
-app.put("/deposit", deposit);
+app.put("/api/deposit", deposit);
 // query params: id, amount (mandatory)
 
-app.put("/withdraw", withdraw);
+app.put("/api/withdraw", withdraw);
 // query params: id, amount (mandatory)
 
-app.put("/transfer", transfer);
+app.put("/api/transfer", transfer);
 // query params: id_from, id_to, amount (mandatory)
 
-app.put("/deposit", deposit);
-// query params: id, amount (mandatory)
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
-});
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(__dirname, "../client/build/index.html"));
+// });
 
 app.listen(port, () => console.log(`Server is up and runing on ${port}`));
