@@ -43,8 +43,8 @@ app.put("/api/withdraw", withdraw);
 app.put("/api/transfer", transfer);
 // query params: id_from, id_to, amount (mandatory)
 
-// app.get("*", (req, res) => {
-//   res.sendFile(path.join(__dirname, "../client/build/index.html"));
-// });
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
 
 app.listen(port, () => console.log(`Server is up and runing on ${port}`));
