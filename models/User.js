@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
-  passID: { type: String, required: true },
+  passportId: { type: String, required: true, unique: true },
   cash: {
     type: Number,
     default: 0,
