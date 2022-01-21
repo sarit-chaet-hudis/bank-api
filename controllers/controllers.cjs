@@ -78,6 +78,7 @@ function getUser(req, res) {
 }
 
 async function getAllUsers(req, res) {
+  console.log("in getAllUsers");
   try {
     const allUsers = await User.find({});
     res.status(200).send(allUsers);
