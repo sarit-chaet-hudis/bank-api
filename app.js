@@ -18,8 +18,8 @@ const {
   getAllUsers,
 } = require("./controllers/controllers.cjs");
 
-// app.use(express.static(path.join(__dirname, "../client/build")));
-app.use(express.static(path.join(__dirname, "../client/public")));
+app.use(express.static(path.join(__dirname, "../client/build")));
+// app.use(express.static(path.join(__dirname, "../client/public")));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
