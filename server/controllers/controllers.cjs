@@ -58,7 +58,12 @@ function withdraw(req, res) {
     saveAccounts(accounts);
   }
 }
-function transfer(req, res) {}
+function transfer(req, res) {
+  // TODO
+}
+function updateCredit(req, res) {
+  // TODO
+}
 
 function getUser(req, res) {
   let accounts = loadAccounts();
@@ -95,4 +100,12 @@ const saveAccounts = (accounts) => {
 //  ways, for example foo may not be there or may not be a string, and
 //   toString may not be a function and instead a string or other user-input.
 
-module.exports = { addUser, deposit, withdraw, transfer, getUser, getAllUsers };
+module.exports = {
+  addUser,
+  deposit,
+  withdraw,
+  transfer,
+  updateCredit,
+  getUser,
+  getAllUsers,
+};

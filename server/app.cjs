@@ -6,7 +6,7 @@ const {
   transfer,
   getUser,
   getAllUsers,
-} = require("./handlers.cjs");
+} = require("./controllers/controllers.cjs");
 
 const cors = require("cors");
 
@@ -24,7 +24,7 @@ app.post("/add", addUser);
 app.get("/", getAllUsers);
 // no query params
 
-app.get("/:id", getUser);
+app.get("/get/:id", getUser);
 // url params: id
 
 app.put("/deposit", deposit);
