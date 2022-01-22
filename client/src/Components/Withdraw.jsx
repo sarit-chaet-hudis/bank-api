@@ -21,7 +21,7 @@ function Withdraw() {
 
   return (
     <div>
-      <h3 style={{ color: "#3045CC" }}>Withdraw Money from User Account</h3>
+      <h3 style={{ color: "#314bf1" }}> Withdraw Money from Account</h3>
       <form>
         <input
           type="text"

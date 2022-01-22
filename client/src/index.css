@@ -22,6 +22,8 @@ input {
 }
 
 button {
+  background-color: rgb(167, 230, 255);
   padding: 5px 10px;
   border-radius: 15px;
+  border: none;
 }

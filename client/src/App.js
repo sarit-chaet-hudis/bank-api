@@ -1,6 +1,7 @@
 import AddUser from "./Components/AddUser";
 import Deposit from "./Components/Deposit";
 import Withdraw from "./Components/Withdraw";
+import Transfer from "./Components/Transfer";
 import bankApi from "./api/Api";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <AddUser />
       <Deposit />
       <Withdraw />
+      <Transfer />
     </div>
   );
 }

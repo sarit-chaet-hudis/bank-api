@@ -41,7 +41,6 @@ async function deposit(req, res) {
 }
 
 async function withdraw(req, res) {
-  console.log("in withdraw");
   const { passportId, amount } = req.query;
 
   if (!passportId) res.send("No passport ID supplied");
@@ -66,10 +65,42 @@ async function withdraw(req, res) {
     }
   }
 }
+async function transfer(req, res) {
+  const { passportIdFrom, passportIdTo, amount } = req.query;
 
-function transfer(req, res) {
-  // TODO
+  if (!passportIdFrom || !passportIdTo)
+    res.send("Please enter both passport IDs");
+  else if (isNaN(amount)) {
+    res.send("Transfer amount has to be a number");
+  } else if (+amount <= 0) {
+    res.send("Transfer amount has to be a positive number");
+  } else {
+    try {
+      const userFrom = await User.findOne({ passportId: passportIdFrom });
+      const userTo = await User.findOne({ passportId: passportIdTo });
+      if (!userFrom || !userTo) {
+        res.send(`One of the IDs is wrong, try again`);
+      } else if (userFrom.cash + userFrom.credit - amount < 0) {
+        res.send(
+          `User ${userFrom.passportId} can only draw a maximum of ${
+            userFrom.cash + userFrom.credit
+          }`
+        );
+      } else {
+        userFrom.cash -= amount;
+        userTo.cash += amount;
+        await userFrom.save();
+        await userTo.save();
+        res.send(
+          `Updated balance for ${userFrom.passportId} is ${userFrom.cash}`
+        );
+      }
+    } catch (err) {
+      res.send(err.message);
+    }
+  }
 }
+
 function updateCredit(req, res) {
   // TODO
 }
