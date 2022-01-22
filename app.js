@@ -16,6 +16,7 @@ const {
   transfer,
   getUser,
   getAllUsers,
+  deleteUser,
 } = require("./controllers/controllers.cjs");
 
 app.use(express.static(path.join(__dirname, "./client/build")));
@@ -26,22 +27,25 @@ app.use(express.urlencoded({ extended: true }));
 mongoose.connect(URI, () => console.log("connected mongoose"));
 
 app.post("/api/add", addUser);
-// query params: id (mandatory), cash, credit
+// query params: passportId (mandatory), cash, credit
 
 app.get("/api/allusers", getAllUsers);
 // no query params
 
 app.get("/api/get/:id", getUser);
-// url params: id
+// url params: passportId
 
 app.put("/api/deposit", deposit);
-// query params: id, amount (mandatory)
+// query params: passportId, amount (mandatory)
 
 app.put("/api/withdraw", withdraw);
-// query params: id, amount (mandatory)
+// query params: passportId, amount (mandatory)
 
 app.put("/api/transfer", transfer);
-// query params: id_from, id_to, amount (mandatory)
+// query params: passportIdFrom, passportIdTo, amount (mandatory)
+
+app.delete("/api/delete", deleteUser);
+// query params: passportId, adminPass
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));

@@ -20,6 +20,28 @@ async function addUser(req, res) {
   }
 }
 
+async function deleteUser(req, res) {
+  // add new user, data: passport id, cash(default 0), credit(default 0).
+  let { passportId, adminPass } = req.query;
+
+  if (!passportId) {
+    res.status(400).send("No passport Id supplied for deletion");
+  } else if (adminPass != "123456") {
+    res.send("Wrong admin password");
+  } else {
+    try {
+      const user = await User.find({ passportId: passportId });
+      if (!user) res.send(`No user has passport ID ${passportId}`);
+      else {
+        const resp = await User.deleteOne({ passportId: passportId });
+        res.send(resp);
+      }
+    } catch (err) {
+      res.send(err.message);
+    }
+  }
+}
+
 async function deposit(req, res) {
   const { passportId, amount } = req.query;
 
@@ -126,20 +148,6 @@ async function getAllUsers(req, res) {
   }
 }
 
-// const loadAccounts = () => {
-//   try {
-//     const data = fs.readFileSync("./../accounts.json").toString();
-//     return JSON.parse(data);
-//   } catch (error) {
-//     return [];
-//   }
-// };
-
-const saveAccounts = (accounts) => {
-  const data = JSON.stringify(accounts);
-  fs.writeFileSync("./src/accounts.json", data);
-};
-
 module.exports = {
   addUser,
   deposit,
@@ -148,4 +156,5 @@ module.exports = {
   updateCredit,
   getUser,
   getAllUsers,
+  deleteUser,
 };

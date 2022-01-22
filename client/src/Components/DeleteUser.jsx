@@ -1,20 +1,19 @@
 import { useState } from "react";
 import bankApi from "../api/Api";
 
-function AddUser() {
+function DeleteUser() {
   const [passportId, setPassportId] = useState("");
-  const [cash, setCash] = useState("");
-  const [credit, setCredit] = useState("");
+  const [adminPass, setadminPass] = useState("");
 
-  const addUser = async (e) => {
+  const deleteUser = async (e) => {
     e.preventDefault();
-    const newUser = { passportId, cash, credit };
     try {
-      const res = await bankApi.post("/add", newUser);
+      const res = await bankApi.delete(
+        `/delete?passportId=${passportId}&adminPass=${adminPass}`
+      );
       console.log(res);
       setPassportId("");
-      setCash("");
-      setCredit("");
+      setadminPass("");
     } catch (err) {
       console.log(err);
     }
@@ -22,7 +21,7 @@ function AddUser() {
 
   return (
     <div>
-      <h3 style={{ color: "#952312" }}>&#10010; Add User to Bank</h3>
+      <h3 style={{ color: "#38BFF4" }}>&#10006; Delete User</h3>
       <form>
         <input
           type="text"
@@ -33,24 +32,17 @@ function AddUser() {
         ></input>
         <input
           type="text"
-          name="cash"
-          placeholder="Cash (optional)"
-          onChange={(e) => setCash(e.target.value)}
-          value={cash}
+          name="adminPass"
+          placeholder="Type password 123456"
+          onChange={(e) => setadminPass(e.target.value)}
+          value={adminPass}
         ></input>
-        <input
-          type="text"
-          name="credit"
-          placeholder="Credit (optional)"
-          onChange={(e) => setCredit(e.target.value)}
-          value={credit}
-        ></input>
-        <button type="submit" onClick={(e) => addUser(e)}>
-          Add User
+        <button type="submit" onClick={(e) => deleteUser(e)}>
+          Delete User
         </button>
       </form>
     </div>
   );
 }
 
-export default AddUser;
+export default DeleteUser;
