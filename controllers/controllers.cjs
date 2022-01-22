@@ -7,15 +7,12 @@ async function addUser(req, res) {
   const { passportId, cash = 0, credit = 0 } = req.body;
   console.log(`passport ID is ${passportId}`);
   if (!passportId) {
-    res.send("No passport Id supplied for new user");
-  } else if (typeof +cash !== "number" || typeof +credit !== "number") {
-    res.send("Cash and credit parameters need to be numbers");
+    res.status(400).send("No passport Id supplied for new user");
   } else {
     try {
-      const newUser = User.create({ passportId, cash, credit });
-      res.status(200).send("New user saved successfully");
+      const newUser = await User.create({ passportId, cash, credit });
     } catch (err) {
-      res.status(500).send(err);
+      res.send(err.message);
     }
   }
 }

@@ -9,10 +9,15 @@ function AddUser() {
   const addUser = async (e) => {
     e.preventDefault();
     const newUser = { passportId, cash, credit };
-    await bankApi.post("/add", newUser);
-    setPassportId("");
-    setCash("");
-    setCredit("");
+    try {
+      const res = await bankApi.post("/add", newUser);
+      console.log(res);
+      setPassportId("");
+      setCash("");
+      setCredit("");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
