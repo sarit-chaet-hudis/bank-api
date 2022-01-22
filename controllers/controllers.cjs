@@ -39,26 +39,34 @@ async function deposit(req, res) {
     }
   }
 }
-function withdraw(req, res) {
-  let accounts = loadAccounts();
-  const { id, amount } = req.query;
-  const user = accounts.find((account) => account.id === id);
-  if (!user) {
-    res.send(`No user in bank has id ${id}. Please try again.`);
-  } else if (isNaN(amount)) {
+
+async function withdraw(req, res) {
+  console.log("in withdraw");
+  const { passportId, amount } = req.query;
+
+  if (!passportId) res.send("No passport ID supplied");
+  else if (isNaN(amount)) {
     res.send("Withdrawal amount has to be a number");
   } else if (+amount <= 0) {
     res.send("Withdrawal amount has to be a positive number");
-  } else if (user.cash + user.credit - amount < 0) {
-    res.send(
-      "User cannot withraw this amount, try a smaller one or update credit"
-    );
   } else {
-    user.cash = +user.cash - +amount;
-    res.send(user);
-    saveAccounts(accounts);
+    try {
+      const user = await User.findOne({ passportId: passportId });
+      if (!user) {
+        res.send(`No user in bank has id ${passportId}. Please try again.`);
+      } else if (user.cash + user.credit - amount < 0) {
+        res.send(`User can only draw a maximum of ${user.cash + user.credit}`);
+      } else {
+        user.cash -= amount;
+        await user.save();
+        res.send(`New user balance is ${user.cash}`);
+      }
+    } catch (err) {
+      res.send(err.message);
+    }
   }
 }
+
 function transfer(req, res) {
   // TODO
 }

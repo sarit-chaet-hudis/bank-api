@@ -1,5 +1,6 @@
 import AddUser from "./Components/AddUser";
 import Deposit from "./Components/Deposit";
+import Withdraw from "./Components/Withdraw";
 import bankApi from "./api/Api";
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <button onClick={getAll}>get all users</button>
       <AddUser />
       <Deposit />
+      <Withdraw />
     </div>
   );
 }
