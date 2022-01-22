@@ -2,15 +2,18 @@ const { get } = require("http");
 const User = require("../models/User");
 
 async function addUser(req, res) {
-  console.log("in addUSer");
   // add new user, data: passport id, cash(default 0), credit(default 0).
-  const { passportId, cash = 0, credit = 0 } = req.body;
-  console.log(`passport ID is ${passportId}`);
+  let { passportId, cash, credit } = req.body;
+
   if (!passportId) {
     res.status(400).send("No passport Id supplied for new user");
   } else {
     try {
+      if (!cash) cash = 0;
+      if (!credit) credit = 0;
+
       const newUser = await User.create({ passportId, cash, credit });
+      res.send("User added");
     } catch (err) {
       res.send(err.message);
     }
