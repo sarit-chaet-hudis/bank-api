@@ -1,3 +1,4 @@
+import AddUser from "./Components/AddUser";
 import bankApi from "./api/Api";
 
 function App() {
@@ -8,8 +9,9 @@ function App() {
 
   return (
     <div className="App">
-      <h1>hello world in the second time</h1>
+      <h1>Bank Manager Web Interface</h1>
       <button onClick={getAll}>get all users</button>
+      <AddUser />
     </div>
   );
 }
