@@ -20,20 +20,23 @@ async function addUser(req, res) {
   }
 }
 
-function deposit(req, res) {
-  let accounts = loadAccounts();
-  const { id, amount } = req.query;
-  const user = accounts.find((account) => account.id === id);
-  if (!user) {
-    res.send(`No user in bank has id ${id}. Please try again.`);
-  } else if (isNaN(amount)) {
+async function deposit(req, res) {
+  const { passportId, amount } = req.query;
+
+  if (!passportId) res.send("No passport ID supplied");
+  else if (isNaN(amount)) {
     res.send("Deposit amount has to be a number");
   } else if (+amount <= 0) {
     res.send("Deposit amount has to be a positive number");
   } else {
-    user.cash = +user.cash + +amount;
-    res.send(user);
-    saveAccounts(accounts);
+    try {
+      const user = await User.findOne({ passportId: passportId });
+      user.cash += amount;
+      await user.save();
+      res.send(`New user cash is ${user.cash}`);
+    } catch (err) {
+      res.send(err.message);
+    }
   }
 }
 function withdraw(req, res) {

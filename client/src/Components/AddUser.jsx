@@ -22,7 +22,7 @@ function AddUser() {
 
   return (
     <div>
-      <h3>Add User to Bank</h3>
+      <h3 style={{ color: "#952312" }}>Add User to Bank</h3>
       <form>
         <input
           type="text"
