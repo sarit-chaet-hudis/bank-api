@@ -21,8 +21,10 @@ apiRouter.put("/deposit/:passportId/:amount", deposit);
 
 apiRouter.put("/withdraw/:passportId/:amount", withdraw);
 
-apiRouter.put("/transfer", transfer);
+apiRouter.put("/transfer/:passportIdFrom/:passportIdTo/:amount", transfer);
 
 apiRouter.delete("/delete/:passportId", deleteUser);
+
+apiRouter.use("*", (req, res) => res.status(404).send("No such path"));
 
 module.exports = apiRouter;

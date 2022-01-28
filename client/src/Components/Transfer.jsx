@@ -10,7 +10,7 @@ function Transfer() {
     e.preventDefault();
     try {
       const res = await bankApi.put(
-        `/transfer?passportIdFrom=${passportIdFrom}&passportIdTo=${passportIdTo}&amount=${amount}`
+        `/transfer/${passportIdFrom}/${passportIdTo}/${amount}`
       );
       console.log(res);
       setPassportIdFrom("");
