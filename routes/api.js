@@ -17,8 +17,7 @@ apiRouter.post("/add", addUser);
 apiRouter.get("/allusers", getAllUsers);
 // no query params
 
-apiRouter.get("/get/:id", getUser);
-// url params: passportId
+apiRouter.get("/get/:passportId", getUser);
 
 apiRouter.put("/deposit/:passportId/:amount", deposit);
 
@@ -28,7 +27,6 @@ apiRouter.put("/withdraw", withdraw);
 apiRouter.put("/transfer", transfer);
 // query params: passportIdFrom, passportIdTo, amount (mandatory)
 
-apiRouter.delete("/delete", deleteUser);
-// query params: passportId, adminPass
+apiRouter.delete("/delete/:passportId", deleteUser);
 
 module.exports = apiRouter;

@@ -8,8 +8,7 @@ async function addUser(req, res) {
     let { passportId, cash, credit } = user;
 
     if (!passportId) {
-      res.status(400).send("No passport Id supplied for new user");
-      // TODO consider throw error - is a better practice ?
+      throw Error("No passport Id supplied");
     } else {
       if (!cash) cash = 0;
       if (!credit) credit = 0;
@@ -22,27 +21,17 @@ async function addUser(req, res) {
 }
 
 async function deleteUser(req, res) {
-  // add new user, data: passport id, cash(default 0), credit(default 0).
-  let { passportId, adminPass } = req.query;
-  // change to params
-
-  if (!passportId) {
-    res.status(400).send("No passport Id supplied for deletion");
-    // see above
-  } else if (adminPass != "123456") {
-    res.send("Wrong admin password");
-  } else {
-    try {
-      // wrap the all the function try catch
-      const user = await User.find({ passportId: passportId });
-      if (!user) res.send(`No user has passport ID ${passportId}`);
-      else {
-        const resp = await User.deleteOne({ passportId: passportId });
-        res.send(resp);
-      }
-    } catch (err) {
-      res.send(err.message);
+  try {
+    let { passportId } = req.params;
+    const user = await User.find({ passportId: passportId });
+    const resp = await User.deleteOne({ passportId: passportId });
+    if (resp.deletedCount === 0) {
+      throw Error("No user deleted, check passport ID and try again");
     }
+    res.send(resp);
+  } catch (err) {
+    console.log("in error");
+    res.send(err.message);
   }
 }
 
@@ -142,19 +131,18 @@ function updateCredit(req, res) {
   // TODO
 }
 
-function getUser(req, res) {
-  let accounts = loadAccounts();
-  const { id } = req.params;
-  const user = accounts.find((account) => account.id === id);
-  if (!user) {
-    res.send(`No user in bank has id ${id}. Please try again.`);
-  } else {
-    res.send(user);
+async function getUser(req, res) {
+  const { passportId } = req.params;
+  try {
+    const user = await User.findOne({ passportId: passportId });
+    if (!user) throw Error("No such user");
+    res.status(200).send(user);
+  } catch (err) {
+    res.status(400).send(err.message);
   }
 }
 
 async function getAllUsers(req, res) {
-  console.log("in getAllUsers");
   try {
     const allUsers = await User.find({});
     res.status(200).send(allUsers);

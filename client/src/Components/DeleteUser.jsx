@@ -3,17 +3,13 @@ import bankApi from "../api/Api";
 
 function DeleteUser() {
   const [passportId, setPassportId] = useState("");
-  const [adminPass, setadminPass] = useState("");
 
   const deleteUser = async (e) => {
     e.preventDefault();
     try {
-      const res = await bankApi.delete(
-        `/delete?passportId=${passportId}&adminPass=${adminPass}`
-      );
+      const res = await bankApi.delete(`/delete/${passportId}`);
       console.log(res);
       setPassportId("");
-      setadminPass("");
     } catch (err) {
       console.log(err);
     }
@@ -29,13 +25,6 @@ function DeleteUser() {
           placeholder="Passport ID"
           onChange={(e) => setPassportId(e.target.value)}
           value={passportId}
-        ></input>
-        <input
-          type="text"
-          name="adminPass"
-          placeholder="Type password 123456"
-          onChange={(e) => setadminPass(e.target.value)}
-          value={adminPass}
         ></input>
         <button type="submit" onClick={(e) => deleteUser(e)}>
           Delete User
