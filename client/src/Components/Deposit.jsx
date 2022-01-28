@@ -8,9 +8,7 @@ function Deposit() {
   const deposit = async (e) => {
     e.preventDefault();
     try {
-      const res = await bankApi.put(
-        `/deposit?passportId=${passportId}&amount=${amount}`
-      );
+      const res = await bankApi.put(`/deposit/${passportId}/${amount}`);
       console.log(res);
       setPassportId("");
       setAmount("");

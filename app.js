@@ -1,54 +1,26 @@
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const mongoose = require("mongoose");
-require("dotenv").config();
-const URI = process.env.MONGO_URI;
 
+const apiRouter = require("./routes/api.js");
+
+const URI = process.env.MONGO_URI;
 const app = express();
 
-const port = process.env.PORT || 3000;
-
-const {
-  addUser,
-  deposit,
-  withdraw,
-  transfer,
-  getUser,
-  getAllUsers,
-  deleteUser,
-} = require("./controllers/controllers.cjs");
-
 app.use(express.static(path.join(__dirname, "./client/build")));
-// app.use(express.static(path.join(__dirname, "../client/public")));
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 mongoose.connect(URI, () => console.log("connected mongoose"));
 
-app.post("/api/add", addUser);
-// query params: passportId (mandatory), cash, credit
-
-app.get("/api/allusers", getAllUsers);
-// no query params
-
-app.get("/api/get/:id", getUser);
-// url params: passportId
-
-app.put("/api/deposit", deposit);
-// query params: passportId, amount (mandatory)
-
-app.put("/api/withdraw", withdraw);
-// query params: passportId, amount (mandatory)
-
-app.put("/api/transfer", transfer);
-// query params: passportIdFrom, passportIdTo, amount (mandatory)
-
-app.delete("/api/delete", deleteUser);
-// query params: passportId, adminPass
+app.use("/api", apiRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build/index.html"));
 });
+
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`Server is up and runing on ${port}`));
