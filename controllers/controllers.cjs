@@ -30,15 +30,12 @@ async function deleteUser(req, res) {
     }
     res.send(resp);
   } catch (err) {
-    console.log("in error");
     res.send(err.message);
   }
 }
 
 async function deposit(req, res) {
   const { passportId, amount } = req.params;
-
-  console.log("~ passportId in controller", passportId);
 
   if (+amount <= 0) {
     res.status(400).send("Deposit amount has to be a positive number");
@@ -54,40 +51,22 @@ async function deposit(req, res) {
   }
 }
 
-// same
-
 async function withdraw(req, res) {
   const { passportId, amount } = req.params;
-  const {
-    isNaNError,
-    positiveNumberError,
-    worngIdError = `No user in bank has id ${passportId}. Please try again.`,
-  } = ERRORS;
-  // params requierd
-
-  // if (!passportId) res.send("No passport ID supplied");
-
-  if (isNaN(amount)) return res.send(isNaNError);
-  if (+amount <= 0) return res.send(positiveNumberError);
 
   try {
-    const user = await User.findOne({ passportId: passportId });
-    const isEnoughMoney = user.cash + user.credit - amount < 0;
-
-    if (!user) return res.send(worngIdError);
-    if (isEnoughMoney) {
-      res.send(`User can only draw a maximum of ${user.cash + user.credit}`);
-    } else {
-      user.cash -= amount;
-      await user.save();
-      res.status(200).send(`New user balance is ${user.cash}`);
+    if (isNaN(amount) || +amount <= 0) {
+      throw Error("Amount has to be a valid positive number");
     }
+    const resp = await handleWithdraw(passportId, amount);
+    res.send(resp);
   } catch (err) {
     res.send(err.message);
   }
 }
 
 async function transfer(req, res) {
+  // TODO change to PARAMS front to back
   const { passportIdFrom, passportIdTo, amount } = req.query;
 
   if (!passportIdFrom || !passportIdTo)
@@ -122,8 +101,6 @@ async function transfer(req, res) {
     }
   }
 }
-
-// very very long can be more short and simple
 
 // this is a very long function please try to use less with the if else if else
 

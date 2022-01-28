@@ -21,7 +21,7 @@ apiRouter.get("/get/:passportId", getUser);
 
 apiRouter.put("/deposit/:passportId/:amount", deposit);
 
-apiRouter.put("/withdraw", withdraw);
+apiRouter.put("/withdraw/:passportId/:amount", withdraw);
 // query params: passportId, amount (mandatory)
 
 apiRouter.put("/transfer", transfer);

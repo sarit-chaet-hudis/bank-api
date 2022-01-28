@@ -8,9 +8,7 @@ function Withdraw() {
   const withdraw = async (e) => {
     e.preventDefault();
     try {
-      const res = await bankApi.put(
-        `/withdraw?passportId=${passportId}&amount=${amount}`
-      );
+      const res = await bankApi.put(`/withdraw/${passportId}/${amount}`);
       console.log(res);
       setPassportId("");
       setAmount("");
