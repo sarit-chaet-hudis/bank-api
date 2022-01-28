@@ -23,17 +23,13 @@ const handleWithdraw = async (passportId, amount) => {
 };
 
 const handleDeposit = async (passportId, amount) => {
-  try {
-    if (+amount <= 0 || isNaN(amount)) {
-      throw Error("Deposit amount has to be a positive number");
-    }
-    const user = await User.findOne({ passportId: passportId });
-    if (!user) throw Error("No such user");
-    user.cash += +amount;
-    await user.save();
-    return `New user cash is ${user.cash}`;
-  } catch (err) {
-    return err.message;
+  if (+amount <= 0 || isNaN(amount)) {
+    throw Error("Deposit amount has to be a positive number");
   }
+  const user = await User.findOne({ passportId: passportId });
+  if (!user) throw Error("No such user");
+  user.cash += +amount;
+  await user.save();
+  return `New user cash is ${user.cash}`;
 };
 module.exports = { saveUser, handleWithdraw, handleDeposit };

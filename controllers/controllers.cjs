@@ -41,7 +41,7 @@ async function deposit(req, res) {
     const resp = await handleDeposit(passportId, amount);
     res.send(resp);
   } catch (err) {
-    res.send(err.message);
+    res.status(400).send(err.message);
   }
 }
 
