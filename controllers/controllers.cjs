@@ -42,7 +42,8 @@ async function deposit(req, res) {
   } else {
     try {
       const user = await User.findOne({ passportId: passportId });
-      user.cash += amount;
+      if (!user) throw Error("No such user");
+      user.cash += +amount;
       await user.save();
       res.send(`New user cash is ${user.cash}`);
     } catch (err) {
