@@ -1,6 +1,6 @@
 const ERRORS = require("../handlers/errorHandlers/user/errors.constants");
 const User = require("../models/User");
-const { saveUser, handleWithdraw } = require("../services/user");
+const { saveUser, handleWithdraw, handleDeposit } = require("../services/user");
 
 async function addUser(req, res) {
   try {
@@ -37,18 +37,11 @@ async function deleteUser(req, res) {
 async function deposit(req, res) {
   const { passportId, amount } = req.params;
 
-  if (+amount <= 0) {
-    res.status(400).send("Deposit amount has to be a positive number");
-  } else {
-    try {
-      const user = await User.findOne({ passportId: passportId });
-      if (!user) throw Error("No such user");
-      user.cash += +amount;
-      await user.save();
-      res.send(`New user cash is ${user.cash}`);
-    } catch (err) {
-      res.send(err.message);
-    }
+  try {
+    const resp = await handleDeposit(passportId, amount);
+    res.send(resp);
+  } catch (err) {
+    res.send(err.message);
   }
 }
 
@@ -56,18 +49,16 @@ async function withdraw(req, res) {
   const { passportId, amount } = req.params;
 
   try {
-    if (isNaN(amount) || +amount <= 0) {
-      throw Error("Amount has to be a valid positive number");
-    }
     const resp = await handleWithdraw(passportId, amount);
     res.send(resp);
   } catch (err) {
-    res.send(err.message);
+    res.status(400).send(err.message);
   }
 }
 
 async function transfer(req, res) {
   // TODO change to PARAMS front to back
+  // use deposit + withdraw handlers
   const { passportIdFrom, passportIdTo, amount } = req.query;
 
   if (!passportIdFrom || !passportIdTo)
